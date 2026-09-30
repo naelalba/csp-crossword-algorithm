@@ -9,7 +9,7 @@ class Variable:
                 self.Ractuales = []
                 self.palabra_actual = None
 
-        def calcularDominio(almacen):
+        def calcularDominio(self, almacen):
             dominio = set()
             
             for palabra in almacen:

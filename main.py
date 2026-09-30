@@ -182,6 +182,29 @@ def extraer_variables(tablero, almacen):
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
                             otrasVariables.append(((f, c), tablero.getCelda(f, c)))
 
+    examinar_restricciones(variablesHorizontales, variablesVerticales)
+
+    return variablesHorizontales, variablesVerticales, otrasVariables
+
+#########################################################################  
+# Clase que se encarga de examinar las restricciones entre variables
+#########################################################################
+
+def examinar_restricciones(variablesHorizontales, variablesVerticales):
+    for h in variablesHorizontales:
+        for v in variablesVerticales:
+            h_pos = h.getPosInicial()
+            for i in range(h.getLongitud()):
+                casilla_h = (h_pos[0], h_pos[1] + i)
+                v_pos = v.getPosInicial()
+                for j in range(v.getLongitud()):
+                    casilla_v = (v_pos[0] + j, v_pos[1])
+                    if casilla_h == casilla_v:
+                        h.Ractuales.append((v, i, j))
+                        v.Ractuales.append((h, j, i)) ## Él, desplazamiento mio, desplazamiento suyo
+                        break
+
+
 
 #########################################################################  
 # Principal
