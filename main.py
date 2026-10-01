@@ -10,6 +10,7 @@ import copy
 from tablero import *
 from variable import *
 from backtracking import *
+from forwardChecking import *
 
 GREY=(190, 190, 190)
 NEGRO=(100,100, 100)
