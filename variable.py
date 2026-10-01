@@ -1,3 +1,5 @@
+from main import *
+
 class Variable:
         def __init__(self, orientacion, posicion_inicial, longitud, restricciones_obligatorias, almacen):
                 self.nombre = f"{self.tipo}_{self.pos[0]},{self.pos[1]}"
@@ -15,13 +17,13 @@ class Variable:
             for palabra in almacen:
                 valida = True
                 for restriccion in self.Robligatorias:
-                    pos_restriccion = restricción[0]
-                    letra = restricción[1]
+                    pos_restriccion = restriccion[0]
+                    letra = restriccion[1]
                     
                     if self.tipo == 'h':
                         i = pos_restriccion[1] - self.pos[1]
                     else:
-                        i = pos_restricción[0] - self.pos[0]
+                        i = pos_restriccion[0] - self.pos[0]
                     
                     if palabra[i] != letra:
                         valida = False
@@ -29,6 +31,36 @@ class Variable:
                 if valida:
                     dominio.add(palabra)
             return dominio
+
+        def actualizarDominio(self):
+            res = set()
+            for palabra in self.dominio:
+                valida = True
+                for restriccion in self.Ractuales:
+                    vecino = restriccion[0]
+                    pos_mia = restriccion[1]
+                    pos_vecino = restriccion[2]
+
+                    if vecino.palabra_actual is None:
+                        continue
+                    else:
+                        letra = vecino.palabra_actual[pos_vecino]
+                        if palabra[pos_mia] != letra:
+                            valida = False
+                            break
+
+                if valida:
+                    res.add(palabra)
+            self.dominio = res
+
+
+
+
+
+
+
+        def setPalabraActual(self, palabra):
+            self.palabra_actual = palabra
 
         def getLongitud(self):
             return self.long

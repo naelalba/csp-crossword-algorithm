@@ -99,7 +99,7 @@ def imprimeAlmacen(almacen):
 # Inicializa las variables del tablero
 #########################################################################
 
-def extraer_variables(tablero, almacen):
+def construir_variables(tablero, almacen):
     variablesHorizontales = []
     variablesVerticales = []
     otrasVariables = []
@@ -182,7 +182,7 @@ def extraer_variables(tablero, almacen):
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
                             otrasVariables.append(((f, c), tablero.getCelda(f, c)))
 
-    examinar_restricciones(variablesHorizontales, variablesVerticales)
+    construir_restricciones(variablesHorizontales, variablesVerticales)
 
     return variablesHorizontales, variablesVerticales, otrasVariables
 
@@ -190,7 +190,7 @@ def extraer_variables(tablero, almacen):
 # Clase que se encarga de examinar las restricciones entre variables
 #########################################################################
 
-def examinar_restricciones(variablesHorizontales, variablesVerticales):
+def construir_restricciones(variablesHorizontales, variablesVerticales):
     for h in variablesHorizontales:
         for v in variablesVerticales:
             h_pos = h.getPosInicial()
