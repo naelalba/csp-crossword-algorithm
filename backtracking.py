@@ -1,7 +1,7 @@
 def backtracking(variables): 
     if variables[0] is None or variables[1] is None:
         return True
-    if variables[0].len() == 0:
+    if variables[0].len() != 0:
         actual = variables[0][0]
         actual.actualizarDominio()
         if actual.getDominio() == set():
@@ -15,7 +15,7 @@ def backtracking(variables):
                 actual.setPalabraActual(None)
             return False
 
-    if variables[1].len() == 0:
+    if variables[1].len() != 0:
         actual = variables[1][0]
         actual.actualizarDominio()
         if actual.getDominio() == set():
