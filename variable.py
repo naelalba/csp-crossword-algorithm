@@ -68,6 +68,9 @@ class Variable:
         def getPosInicial(self):
             return self.pos
 
+        def setDominio(self, dominio):
+            self.dominio = dominio
+
         def getDominio(self):
             return self.dominio
 

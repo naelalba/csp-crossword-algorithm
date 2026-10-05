@@ -29,7 +29,7 @@ def backtracking(variables, usadas):
             return False
         else:
             for palabra in actual.getDominio():
-                if palabra not in usadas:
+                if palabra in usadas:
                     continue
 
                 actual.setPalabraActual(palabra)
