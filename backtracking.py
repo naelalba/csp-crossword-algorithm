@@ -4,9 +4,11 @@ def backtracking(variables, usadas):
     valida = False
     if len(variables[0]) != 0:
         actual = variables[0][0]
+        aux = actual.getDominio().copy()
         actual.actualizarDominio()
         
         if actual.getDominio() == set():
+            actual.setDominio(aux)
             return False
         else:
             for palabra in actual.getDominio():
@@ -20,12 +22,15 @@ def backtracking(variables, usadas):
                     return True
                 actual.setPalabraActual(None)
                 usadas.remove(palabra)
+            actual.setDominio(aux)
             return False
 
     if len(variables[1]) != 0:
         actual = variables[1][0]
+        aux = actual.getDominio().copy()
         actual.actualizarDominio()
         if actual.getDominio() == set():
+            actual.setDominio(aux)
             return False
         else:
             for palabra in actual.getDominio():
@@ -39,4 +44,5 @@ def backtracking(variables, usadas):
                     return True
                 actual.setPalabraActual(None)
                 usadas.remove(palabra)
+            actual.setDominio(aux)
             return False
