@@ -1,5 +1,3 @@
-
-
 def fordwardChecking(variables, usadas):
     if len(variables[0]) == 0 and len(variables[1]) == 0:
             return True
@@ -18,6 +16,7 @@ def fordwardChecking(variables, usadas):
         usadas.add(palabra)
         valida = True
         for restriccion in actual.Ractuales:
+            vecino = restriccion[0]
             if vecino.palabra_actual is not None:
                 continue
             vecino = restriccion[0]

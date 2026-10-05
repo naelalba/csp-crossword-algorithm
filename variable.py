@@ -2,7 +2,6 @@ from main import *
 
 class Variable:
         def __init__(self, orientacion, posicion_inicial, longitud, restricciones_obligatorias, almacen):
-                self.nombre = f"{self.tipo}_{self.pos[0]},{self.pos[1]}"
                 self.tipo = orientacion
                 self.pos = posicion_inicial
                 self.long = longitud
@@ -10,6 +9,8 @@ class Variable:
                 self.dominio = self.calcularDominio(almacen)
                 self.Ractuales = []
                 self.palabra_actual = None
+                self.nombre = f"{self.tipo}_{self.pos[0]},{self.pos[1]}"
+
 
         def calcularDominio(self, almacen):
             dominio = set()
@@ -61,6 +62,9 @@ class Variable:
 
         def setPalabraActual(self, palabra):
             self.palabra_actual = palabra
+
+        def getPalabraActual(self):
+            return self.palabra_actual
 
         def getLongitud(self):
             return self.long

@@ -188,7 +188,7 @@ def construir_variables(tablero, almacen):
     return variablesHorizontales, variablesVerticales, otrasVariables
 
 #########################################################################  
-# Clase que se encarga de examinar las restricciones entre variables
+# Funcion que se encarga de examinar las restricciones entre variables
 #########################################################################
 
 def construir_restricciones(variablesHorizontales, variablesVerticales):
@@ -205,7 +205,21 @@ def construir_restricciones(variablesHorizontales, variablesVerticales):
                         v.Ractuales.append((h, j, i)) ## Él, desplazamiento mio, desplazamiento suyo
                         break
 
-
+#########################################################################  
+# Funcion que actualiza el tablero con las palabras encontradas
+#########################################################################
+def actualizarTablero(tablero, variables):
+    for h in variables[0]:
+        if h.getPalabraActual() is not None:
+            pos = h.getPosInicial()
+            for i in range(h.getLongitud()):
+                tablero.setCelda(pos[0], pos[1] + i, h.getPalabraActual()[i])
+    for v in variables[1]:
+        if v.getPalabraActual() is not None:
+            pos = v.getPosInicial()
+            for i in range(v.getLongitud()):
+                if tablero.getCelda(pos[0] + i, pos[1]) == VACIA:
+                    tablero.setCelda(pos[0] + i, pos[1], v.getPalabraActual()[i])
 
 #########################################################################  
 # Principal
@@ -267,14 +281,22 @@ def main():
                 pos=pygame.mouse.get_pos()                
                 if pulsaBoton(pos, botBK):
                     print('BK')
-                    res=True #esta variable debe estar a falso si el problema no tiene solución
+                    variables = construir_variables(tablero, almacen)
+                    usadas = set()
+                    res = backtracking(variables, usadas) 
                     if res==False:
-                            MessageBox.showwarning("Alerta", "No hay solución")                     
+                            MessageBox.showwarning("Alerta", "No hay solución")   
+                    else:
+                        actualizarTablero(tablero, variables)
                 elif pulsaBoton(pos, botFC):
                     print('FC')
-                    res=True #esta variable debe estar a falso si el problema no tiene solución               
+                    variables = construir_variables(tablero, almacen)
+                    usadas = set()
+                    res = fordwardChecking(variables, usadas)
                     if res==False:
-                        MessageBox.showwarning("Alerta", "No hay solución")  
+                        MessageBox.showwarning("Alerta", "No hay solución")
+                    else:
+                        actualizarTablero(tablero, variables)
                 elif pulsaBoton(pos, botAC3):
                     print('AC3')                    
                 elif inTablero(pos, filas, cols):
