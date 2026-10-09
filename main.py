@@ -161,27 +161,34 @@ def construir_variables(tablero, almacen):
                 if f == 0:
                     if c == 0:
                         if tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
                     elif c == cols - 1:
                         if tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
                 elif f == fils - 1:
                     if c == 0:
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
                     elif c == cols - 1:
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
                 else:
                     if c == 0:
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
                     elif c == cols - 1:
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
                     else:
                         if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            otrasVariables.append(((f, c), tablero.getCelda(f, c)))
+                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
+                            otrasVariables.append(var)
 
     construir_restricciones(variablesHorizontales, variablesVerticales)
 
@@ -220,6 +227,28 @@ def actualizarTablero(tablero, variables):
             for i in range(v.getLongitud()):
                 if tablero.getCelda(pos[0] + i, pos[1]) == VACIA:
                     tablero.setCelda(pos[0] + i, pos[1], v.getPalabraActual()[i])
+    for o in variables[2]:
+        if o.getPalabraActual() is not None:
+            pos = o.getPosInicial()
+            tablero.setCelda(pos[0], pos[1], o.getPalabraActual())
+
+
+#########################################################################  
+# Función que se encarga de analizar las variables de longitud 1
+#########################################################################
+def gestionarCortas(v, usadas):
+    valido = True
+    for variable in v:
+        for palabra in variable.getDominio():
+            if palabra in usadas:
+                continue
+            else:
+                variable.setPalabraActual(palabra)
+                usadas.add(palabra)
+                break
+        if variable.getPalabraActual() == None:
+            valido = False
+    return valido
 
 #########################################################################  
 # Principal
@@ -283,20 +312,28 @@ def main():
                     print('BK')
                     variables = construir_variables(tablero, almacen)
                     usadas = set()
-                    res = backtracking(variables, usadas) 
-                    if res==False:
-                            MessageBox.showwarning("Alerta", "No hay solución")   
+                    sol = gestionarCortas(variables[2], usadas)
+                    if sol == False:
+                        MessageBox.showwarning("Alerta", "No hay solución")
                     else:
-                        actualizarTablero(tablero, variables)
+                        res = backtracking(variables, usadas) 
+                        if res==False:
+                                MessageBox.showwarning("Alerta", "No hay solución")   
+                        else:
+                            actualizarTablero(tablero, variables)
                 elif pulsaBoton(pos, botFC):
                     print('FC')
                     variables = construir_variables(tablero, almacen)
                     usadas = set()
-                    res = fordwardChecking(variables, usadas)
-                    if res==False:
+                    sol = gestionarCortas(variables[2], usadas)
+                    if sol == False:
                         MessageBox.showwarning("Alerta", "No hay solución")
                     else:
-                        actualizarTablero(tablero, variables)
+                        res = fordwardChecking(variables, usadas)
+                        if res==False:
+                            MessageBox.showwarning("Alerta", "No hay solución")
+                        else:
+                            actualizarTablero(tablero, variables)
                 elif pulsaBoton(pos, botAC3):
                     print('AC3')                    
                 elif inTablero(pos, filas, cols):
