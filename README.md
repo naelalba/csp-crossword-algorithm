@@ -14,8 +14,6 @@ El núcleo del software incluye la implementación desde cero de tres algoritmos
 *   **Algoritmo AC-3 (Arc Consistency):** Sistema de preprocesamiento que evalúa las variables del tablero para reducir sus dominios iniciales y eliminar inconsistencias de arista antes de iniciar los procesos de búsqueda profunda.
 *   **Forward Checking (FC):** Algoritmo predictivo que, al asignar un valor a una variable actual, comprueba la viabilidad frente a las variables futuras (huecos del crucigrama sin instanciar) que comparten restricciones, eliminando de sus dominios las opciones incompatibles.
 *   **Backtracking (BK):** Sistema de búsqueda recursiva que explora combinaciones de palabras y retrocede a estados anteriores (desasignando variables) en el momento que detecta una ruta inconsistente sin solución.
-
-*(Opcional: Si implementaste Backjumping, añade esta línea)*
 *   **Backjumping (BJ):** Optimización de la búsqueda que evita el sobreprocesamiento (*trashing*) saltando directamente al origen estructural del conflicto algorítmico, en lugar de retroceder cronológicamente.
 
 ## 🚀 Despliegue y Ejecución
