@@ -57,8 +57,7 @@ class Variable:
 
 
         def __str__(self):
-                return "Nombre " + self.nombre + " Posicion: " + self.pos[0] + " " + self.pos[1] + " Tipo: " + self.tipo + " Dominio: " + self.dominio
-
+            return f"Nombre {self.nombre} Pos: {self.pos} Tipo: {self.tipo} Dominio: {self.dominio}"
         def setPalabraActual(self, palabra):
             self.palabra_actual = palabra
 
