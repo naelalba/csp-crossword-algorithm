@@ -1,5 +1,3 @@
-from main import *
-
 class Variable:
         def __init__(self, orientacion, posicion_inicial, longitud, restricciones_obligatorias, almacen):
                 self.tipo = orientacion

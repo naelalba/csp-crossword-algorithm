@@ -11,6 +11,7 @@ from tablero import *
 from variable import *
 from backtracking import *
 from forwardChecking import *
+from AC3 import *
 
 GREY=(190, 190, 190)
 NEGRO=(100,100, 100)
@@ -157,38 +158,23 @@ def construir_variables(tablero, almacen):
 
     for f in range(fils):
         for c in range(cols):
-            if tablero.getCelda(f, c) != LLENA:
-                if f == 0:
-                    if c == 0:
-                        if tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
-                    elif c == cols - 1:
-                        if tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
-                elif f == fils - 1:
-                    if c == 0:
-                        if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
-                    elif c == cols - 1:
-                        if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
-                else:
-                    if c == 0:
-                        if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
-                    elif c == cols - 1:
-                        if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
-                    else:
-                        if tablero.getCelda(f - 1, c) == LLENA and tablero.getCelda(f + 1, c) == LLENA and tablero.getCelda(f, c - 1) == LLENA and tablero.getCelda(f, c + 1) == LLENA:
-                            var = Variable('u', (f, c), 1, [], almacen.get(1, set()))
-                            otrasVariables.append(var)
+            celda = tablero.getCelda(f, c)
+            if celda != LLENA:
+                aislada = True
+                if f > 0 and tablero.getCelda(f-1, c) != LLENA:
+                    aislada = False
+                if f < fils - 1 and tablero.getCelda(f+1, c) != LLENA:
+                    aislada = False
+                if c > 0 and tablero.getCelda(f, c-1) != LLENA:
+                    aislada = False
+                if c < cols - 1 and tablero.getCelda(f, c+1) != LLENA:
+                    aislada = False
+                if aislada:
+                    restricciones = []
+                    if celda != VACIA:
+                        restricciones.append(((f, c), celda))
+                    var = Variable('u', (f,c), 1, restricciones, almacen.get(1, set()))
+                    otrasVariables.append(var)
 
     construir_restricciones(variablesHorizontales, variablesVerticales)
 
@@ -300,7 +286,10 @@ def main():
     #imprimeAlmacen(almacen)
     game_over=False
     tablero=Tablero(filas, cols)    
-    ac3=False
+
+    variables = None
+    ac3_ok = False
+
     while not game_over:
         for event in pygame.event.get():
             if event.type==pygame.QUIT:               
@@ -310,7 +299,8 @@ def main():
                 pos=pygame.mouse.get_pos()                
                 if pulsaBoton(pos, botBK):
                     print('BK')
-                    variables = construir_variables(tablero, almacen)
+                    if not ac3_ok:
+                        variables = construir_variables(tablero, almacen)
                     usadas = set()
                     sol = gestionarCortas(variables[2], usadas)
                     if sol == False:
@@ -321,9 +311,11 @@ def main():
                                 MessageBox.showwarning("Alerta", "No hay solución")   
                         else:
                             actualizarTablero(tablero, variables)
+                    ac3_ok = False
                 elif pulsaBoton(pos, botFC):
                     print('FC')
-                    variables = construir_variables(tablero, almacen)
+                    if not ac3_ok:
+                        variables = construir_variables(tablero, almacen)
                     usadas = set()
                     sol = gestionarCortas(variables[2], usadas)
                     if sol == False:
@@ -334,9 +326,16 @@ def main():
                             MessageBox.showwarning("Alerta", "No hay solución")
                         else:
                             actualizarTablero(tablero, variables)
+                    ac3_ok = False
                 elif pulsaBoton(pos, botAC3):
-                    print('AC3')                    
+                    print('AC3')
+                    variables = construir_variables(tablero, almacen)
+                    ac3_ok = ac3(variables)
+                    if not ac3_ok:
+                        variables = None
+                        MessageBox.showwarning("Alerta", "No hay solución")
                 elif inTablero(pos, filas, cols):
+                    ac3_ok = False
                     colDestino=pos[0]//(TAM+MARGEN)
                     filDestino=pos[1]//(TAM+MARGEN)                    
                     if event.button==1: #botón izquierdo
