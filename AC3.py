@@ -17,8 +17,19 @@ def ac3(variables):
     mostrarDominios(variables)
     res = True
 
+    for horizontal in variables[0]:
+        if(len(horizontal.getDominio()) == 0):
+            res = False
 
-    while cola_restricciones:
+    for vertical in variables[1]:
+        if(len(vertical.getDominio()) == 0):
+            res = False
+            
+    for otras in variables[2]:
+        if(len(otras.getDominio()) == 0):
+            res = False
+
+    while res and cola_restricciones:
         modificado = False
         tupla = cola_restricciones.popleft()
         nuevoDominio = set()
