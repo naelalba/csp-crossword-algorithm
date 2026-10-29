@@ -2,7 +2,6 @@ from collections import deque
 
 def ac3(variables):
     # R.ACTUALES => (VECINO, POS-MIA, POS-VECINO)
-    # USAMOS DEQUE PARA AHORRO DE MEMORIA
     cola_restricciones = deque()
     if(len(variables[0]) != 0):
         for variable in variables[0]:
@@ -13,18 +12,16 @@ def ac3(variables):
             for restriccion in variable.Ractuales:
                 cola_restricciones.append((variable, restriccion))
 
-    print("DOMINIOS ANTES DEL AC3 \n")
+    print("\nDOMINIOS ANTES DEL AC3")
     mostrarDominios(variables)
     res = True
 
     for horizontal in variables[0]:
         if(len(horizontal.getDominio()) == 0):
             res = False
-
     for vertical in variables[1]:
         if(len(vertical.getDominio()) == 0):
             res = False
-            
     for otras in variables[2]:
         if(len(otras.getDominio()) == 0):
             res = False
@@ -60,7 +57,7 @@ def ac3(variables):
             break
 
         
-    print("DOMINIOS DESPUÉS DEL AC3 \n")
+    print("\nDOMINIOS DESPUÉS DEL AC3")
     mostrarDominios(variables)
 
     
