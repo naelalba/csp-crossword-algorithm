@@ -1,4 +1,4 @@
-def fordwardChecking(variables, usadas):
+def forwardChecking(variables, usadas):
     if len(variables[0]) == 0 and len(variables[1]) == 0:
             return True
     if len(variables[0]) != 0:
@@ -31,7 +31,7 @@ def fordwardChecking(variables, usadas):
                     vecino.setDominio(dominio)
                 break
         if valida:
-            if fordwardChecking(siguientes, usadas):
+            if forwardChecking(siguientes, usadas):
                 return True
             else:
                 actual.setPalabraActual(None)

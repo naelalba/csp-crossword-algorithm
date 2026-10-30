@@ -321,7 +321,7 @@ def main():
                     if sol == False:
                         MessageBox.showwarning("Alerta", "No hay solución")
                     else:
-                        res = fordwardChecking(variables, usadas)
+                        res = forwardChecking(variables, usadas)
                         if res==False:
                             MessageBox.showwarning("Alerta", "No hay solución")
                         else:
