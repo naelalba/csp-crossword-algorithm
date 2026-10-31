@@ -12,6 +12,7 @@ from variable import *
 from backtracking import *
 from forwardChecking import *
 from AC3 import *
+from backjumping import *
 
 GREY=(190, 190, 190)
 NEGRO=(100,100, 100)
@@ -306,7 +307,15 @@ def main():
                     if sol == False:
                         MessageBox.showwarning("Alerta", "No hay solución")
                     else:
-                        res = backtracking(variables, usadas) 
+                        t_ini = time.perf_counter()
+                        res = backtracking(variables, usadas)
+                        #res = backjumping(variables, usadas)
+                        t_fin = time.perf_counter()
+
+                        tiempo_ms = (t_fin - t_ini) * 1000
+                        print(f"-> Tiempo BK: {tiempo_ms:.3f} ms ({t_fin - t_ini:.5f} s)")
+                        #print(f"-> Tiempo BJ: {tiempo_ms:.3f} ms ({t_fin - t_ini:.5f} s)")
+                        
                         if res==False:
                                 MessageBox.showwarning("Alerta", "No hay solución")   
                         else:
@@ -321,7 +330,14 @@ def main():
                     if sol == False:
                         MessageBox.showwarning("Alerta", "No hay solución")
                     else:
+
+                        t_ini = time.perf_counter()
                         res = forwardChecking(variables, usadas)
+                        t_fin = time.perf_counter()
+
+                        tiempo_ms = (t_fin - t_ini) * 1000
+                        print(f"-> Tiempo FC: {tiempo_ms:.3f} ms ({t_fin - t_ini:.5f} s)")
+
                         if res==False:
                             MessageBox.showwarning("Alerta", "No hay solución")
                         else:
@@ -330,7 +346,14 @@ def main():
                 elif pulsaBoton(pos, botAC3):
                     print('AC3')
                     variables = construir_variables(tablero, almacen)
+
+                    t_ini = time.perf_counter()
                     ac3_ok = ac3(variables)
+                    t_fin = time.perf_counter()
+
+                    tiempo_ms = (t_fin - t_ini) * 1000
+                    print(f"-> Tiempo AC3: {tiempo_ms:.3f} ms ({t_fin - t_ini:.5f} s)")
+
                     if not ac3_ok:
                         variables = None
                         MessageBox.showwarning("Alerta", "No hay solución")
